@@ -1,0 +1,31 @@
+DWAPlannerROS:
+  #max_vel_x: 0.45
+  #min_vel_x: -0.45
+  #max_vel_theta: 1.0
+  #min_in_place_vel_theta: 0.4
+
+  acc_lim_x: 2.5
+  acc_lim_y: 2.5
+  acc_lim_theta: 3.2
+  acc_limit_trans: 2.5
+
+  max_trans_vel: 0.45
+  min_trans_vel: 0.01
+  max_vel_x: 0.45
+  min_vel_x: 0.0 #disable backward motion, unstable
+  max_vel_y: 0.0
+  min_vel_y: 0.0
+  max_rot_vel: 1.0
+  min_rot_vel: 0.4 #?
+
+  yaw_goal_tolerance: 0.05
+  xy_goal_tolerance: 0.1
+  latch_xy_goal_tolerance: false
+
+  sim_time: 1.7
+  sim_granularity: 0.025
+  vx_samples: 20
+  vy_samples: 3
+
+  prune_plan: true
+  holonomic_robot: false

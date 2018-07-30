@@ -6,7 +6,8 @@
 		<rosparam file="$(find udacity_bot)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
 		<rosparam file="$(find udacity_bot)/config/local_costmap_params.yaml" command="load" />
 		<rosparam file="$(find udacity_bot)/config/global_costmap_params.yaml" command="load" />
-		<rosparam file="$(find udacity_bot)/config/base_local_planner_params.yaml" command="load" />
+		<!--<rosparam file="$(find udacity_bot)/config/base_local_planner_params.yaml" command="load" />-->
+		<rosparam file="$(find udacity_bot)/config/dwa_local_planner_params.yaml" command="load" />
 		<rosparam file="$(find udacity_bot)/config/move_base.yaml" command="load" />
 
 		<remap from="cmd_vel" to="cmd_vel"/>
@@ -14,7 +15,9 @@
 		<remap from="scan" to="/scan"/>
 
 		<param name="base_global_planner" type="string" value="navfn/NavfnROS" />
-		<param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>
+		<!--<param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>-->
+		<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
+		<param name="planner_frequency" value="0.2"/>
 
 	</node>
 
