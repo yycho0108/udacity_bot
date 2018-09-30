@@ -51,6 +51,11 @@ class Teleop(object):
     def mouse_cb(self, event,x,y,flags,param):
         if event == cv2.EVENT_LBUTTONDOWN:
             self.cmd_active_ = True
+            self.x_, self.y_ = x, y
+            self.cmd_v_ = (-y) / float(self.res_) + 0.5
+            self.cmd_w_ = np.sign(self.cmd_v_) * (-x/float(self.res_) + 0.5)
+            self.last_cmd_ = rospy.Time.now()
+
         if event == cv2.EVENT_LBUTTONUP:
             self.cmd_active_ = False
 

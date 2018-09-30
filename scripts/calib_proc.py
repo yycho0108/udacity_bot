@@ -2,10 +2,22 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
+from argparse import ArgumentParser
 
 def main():
-    m = np.load('/tmp/data.npy')
-    m = m[:-4]
+    # arguments
+    parser = ArgumentParser()
+    parser.add_argument('-f', '--file', default='/tmp/data.npy', help='Calibration Data Path')
+    parser.add_argument('-r', '--rel', default='False', help='Relative / Absolute Discrepancy')
+    parser.add_argument('-i', '--inv', default='False', help='Invert quiver source (default : cmd_vel -> gt_vel)')
+    opt = parser.parse_args()
+
+    # convert to bool (TODO : str2bool typing in argparse)
+    opt.rel = (opt.rel.lower() in ['true', 'y', '1'])
+    opt.inv = (opt.inv.lower() in ['true', 'y', '1'])
+
+    # load file
+    m = np.load(opt.file)
     gv, gw, cv, cw = m.T
 
     # find limits
@@ -17,17 +29,28 @@ def main():
     mn_w, mx_w = np.min(w), np.max(w)
     s_w = (mx_w - mn_w)
     avg_w = (mx_w + mn_w) / 2.0
-
     s = max(s_v,s_w)
     lim_v = [avg_v - s/2., avg_v + s/2.]
     lim_w = [avg_w - s/2., avg_w + s/2.]
 
-    x = cv
-    y = cw
-    u = (gv - cv)
-    v = (gw - cw)
+    if opt.inv:
+        x = gv
+        y = gw
+        u = (cv - gv)
+        v = (cw - gw)
+    else:
+        x = cv
+        y = cw
+        u = (gv - cv)
+        v = (gw - cw)
+
+    if opt.rel:
+        u /= (x + 0.01*np.sign(x))
+        v /= (y + 0.01*np.sign(y))
 
     plt.quiver(x,y,u,v,color='k')
+    plt.grid()
+    plt.gca().set_axisbelow(True)
 
     plt.axvline(x=0.0, color='g', linestyle='-')
     plt.axhline(y=0.0, color='g', linestyle='-')
@@ -36,9 +59,9 @@ def main():
     plt.ylim(lim_w)
 
 
-    plt.title('Command Velocity Discrepancy Field')
+    plt.title('Command Velocity Discrepancy Field' + (' (Rel)' if opt.rel else '') )
     plt.xlabel('v')
-    plt.ylabel('w')
+    plt.ylabel('$\omega$')
     plt.show()
 
 if __name__ == '__main__':
