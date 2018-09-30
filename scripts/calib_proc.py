@@ -63,7 +63,7 @@ def main():
     mfun = optimize_v2(
             np.stack([gv,gw], axis=0),
             np.stack([cv,cw], axis=0))
-    gv, gw = mfun(gv,gw)
+    mv, mw = mfun(gv,gw)
 
 
     # find limits
@@ -84,11 +84,15 @@ def main():
         y = gw
         u = (cv - gv)
         v = (cw - gw)
+        u2 = (mv - gv)
+        v2 = (mw - gw)
     else:
         x = cv
         y = cw
         u = (gv - cv)
         v = (gw - cw)
+        u2 = (gv - mv)
+        v2 = (gw - mw)
 
     #print np.sort(np.linalg.norm(
     #    np.stack([u,v],axis=-1),axis=-1))[::-1]
@@ -99,13 +103,16 @@ def main():
     if opt.rel:
         u /= (x + 0.01*np.sign(x))
         v /= (y + 0.01*np.sign(y))
+        u2 /= (gv + 0.01*np.sign(gv))
+        v2 /= (gw + 0.01*np.sign(gw))
 
-    plt.quiver(x,y,u,v,color='k')
+    plt.quiver(x,y,u,v,color='k',label='gv->cv(data)')
+    plt.quiver(x,y,u2,v2,color='r',label='gv->cv(model)')
     plt.grid()
     plt.gca().set_axisbelow(True)
 
-    plt.axvline(x=0.0, color='g', linestyle='-')
-    plt.axhline(y=0.0, color='g', linestyle='-')
+    plt.axvline(x=0.0, color='g', linestyle='-', label=None)
+    plt.axhline(y=0.0, color='g', linestyle='-', label=None)
 
     plt.xlim(lim_v)
     plt.ylim(lim_w)
@@ -114,6 +121,7 @@ def main():
     plt.title('Command Velocity Discrepancy Field' + (' (Rel)' if opt.rel else '') )
     plt.xlabel('v')
     plt.ylabel('$\omega$')
+    plt.legend()
     plt.show()
 
 if __name__ == '__main__':
