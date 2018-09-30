@@ -3,22 +3,63 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from argparse import ArgumentParser
+#from scipy.optimize import curve_fit
+#from sklearn.linear_model import LinearRegression
+#
+#def func(x,
+#        a,b,c,d,
+#        e,f,g,h
+#        ):
+#    v, w = x
+#    v2 = a*v+b*w + e*v*v+f*w*w
+#    w2 = c*v+d*w + g*v*v+h*w*w
+#    return np.stack([v2,w2], axis=0).ravel()
+#
+#def optimize(src, dst):
+#    popt, pcov = curve_fit(func, src, dst)
+#    return popt
+
+def optimize_v2(src, dst):
+    v, w = src
+
+    A = np.array([
+        np.ones_like(v), v, w,
+        v*v, v*w, w*w]).T
+    B = dst.T
+    c,r = np.linalg.lstsq(A,B,rcond=None)[0:2]
+    print 'hmm', c
+    print 'hmm-r', r
+    #clf = LinearRegression()
+    #clf.fit(A,B)
+    #print 'hmm', clf.coef_
+
+    vex = 'v\' = {} + {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,0])
+    wex = 'w\' = {} + {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,1])
+
+    return lambda v,w : c.T.dot([np.ones_like(v),v,w,v*v,v*w,w*w])
 
 def main():
     # arguments
     parser = ArgumentParser()
     parser.add_argument('-f', '--file', default='/tmp/data.npy', help='Calibration Data Path')
-    parser.add_argument('-r', '--rel', default='False', help='Relative / Absolute Discrepancy')
-    parser.add_argument('-i', '--inv', default='False', help='Invert quiver source (default : cmd_vel -> gt_vel)')
-    opt = parser.parse_args()
 
-    # convert to bool (TODO : str2bool typing in argparse)
-    opt.rel = (opt.rel.lower() in ['true', 'y', '1'])
-    opt.inv = (opt.inv.lower() in ['true', 'y', '1'])
+    parser.add_argument('-r', '--rel', dest='rel', action='store_true', help='Relative Discrepancy (default : absolute)')
+    parser.add_argument('-i', '--inv', dest='inv', action='store_true', help='Invert quiver source (gt_vel -> cmd_vel)')
+
+    parser.set_defaults(rel=False, inv=False)
+
+    opt = parser.parse_args()
+    print('options : {}'.format(opt))
 
     # load file
     m = np.load(opt.file)
     gv, gw, cv, cw = m.T
+
+    mfun = optimize_v2(
+            np.stack([gv,gw], axis=0),
+            np.stack([cv,cw], axis=0))
+    #gv, gw = mfun(gv,gw)
+
 
     # find limits
     v = np.concatenate([gv,cv], axis=0)
@@ -43,6 +84,12 @@ def main():
         y = cw
         u = (gv - cv)
         v = (gw - cw)
+
+    #print np.sort(np.linalg.norm(
+    #    np.stack([u,v],axis=-1),axis=-1))[::-1]
+
+    print np.sum(np.linalg.norm(
+            np.stack([u,v],axis=-1),axis=-1))
 
     if opt.rel:
         u /= (x + 0.01*np.sign(x))

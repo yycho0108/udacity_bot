@@ -97,7 +97,8 @@ class CmdCalib(object):
             # filter by input variance
             # considered steady-state input (i.e. not in transition)
 
-            dt_entry = float(raw[-1,-1] - raw[0,-1])
+            c_dt = np.diff(raw[:,-1])
+            dt_entry = float(raw[-1,-1] - raw[0,-1]) # == sum(c_dt)
 
             dist = np.sum(np.linalg.norm(np.diff(raw[:,2:4], axis=0),axis=-1))
 
@@ -106,7 +107,9 @@ class CmdCalib(object):
             gw    = adiff(raw[-1,4], raw[0,4]) / dt_entry
 
             # commanded lin.vel / and.vel
-            cv, cw = np.mean(raw[:,:2], axis=0)
+            #cv, cw = np.mean(raw[:,:2], axis=0) - naive version
+            cv = np.sum(raw[:-1,0]*c_dt) / dt_entry
+            cw = np.sum(raw[:-1,1]*c_dt) / dt_entry
 
             # enter processed information into database
             self.data_.append( [gv,gw,cv,cw] )
