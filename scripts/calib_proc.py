@@ -24,24 +24,53 @@ def optimize_v2(src, dst):
 
     A = np.array([
         v, w,
-        v*v, v*w, w*w]).T
+        v*v,w*w]).T
     #A = np.array([v, w]).T
+    #A = np.array([v,w,1./v,1./w]).T
     B = dst.T
     c,r = np.linalg.lstsq(A,B,rcond=None)[0:2]
-    print 'hmm', c
-    print 'hmm-r', r
+    #print 'hmm', c
+    #print 'hmm-r', r
 
-    vex = 'v\' = {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,0])
-    wex = 'w\' = {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,1])
-
+    #vex = 'v\' = {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,0])
+    #wex = 'w\' = {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,1])
     #vex = 'v\' = {}v + {}w'.format(*c[:,0])
     #wex = 'w\' = {}v + {}w'.format(*c[:,1])
-    print vex
-    print wex
+    #print vex
+    #print wex
 
-    return lambda v,w : c.T.dot([v,w,v*v,v*w,w*w])
+    return lambda v,w : c.T.dot([v,w,v*v,w*w])
     #return lambda v,w : c.T.dot([v, w])
+    #return lambda v,w : c.T.dot([v, w,1./v,1./w])
 
+def delta_viz(
+        mn_v, mx_v, mn_w, mx_w, v_res, w_res,
+        cv, cw, gv, gw):
+    nax = np.newaxis
+    vs = np.arange(mn_v, mx_v, v_res)
+    ws = np.arange(mn_w, mx_w, w_res)
+
+    dv = np.reshape(vs, [-1,1]) - np.reshape(cv, [1,-1]) # Gv,N
+    dw = np.reshape(ws, [-1,1]) - np.reshape(cw, [1,-1]) # Gw,N
+    d = np.sqrt(np.square(dv[:,nax]) + np.square(dw[nax,:])) # Gv,Gw,N
+
+    weight = (1.0 / d)
+    viz = weight.dot(gw-cw) / np.sum(weight, axis=-1) # or gw-cw
+    #viz /= vs[:,nax]
+
+    print viz.shape
+
+    plt.figure()
+    plt.scatter(cw, cv)
+
+    plt.figure()
+    plt.imshow(viz)
+    plt.xlabel('w')
+    plt.ylabel('v')
+    plt.xticks(range(len(ws)), np.around(ws,2), rotation='vertical')
+    plt.yticks(range(len(vs)), np.around(vs,2))
+    plt.title('$\Delta \omega $')
+    plt.colorbar()
 
 def main():
     # arguments
@@ -106,22 +135,33 @@ def main():
         u2 /= (gv + 0.01*np.sign(gv))
         v2 /= (gw + 0.01*np.sign(gw))
 
-    plt.quiver(x,y,u,v,color='k',label='gv->cv(data)')
-    plt.quiver(x,y,u2,v2,color='r',label='gv->cv(model)')
+    plt.figure()
+
+    plt.quiver(y,x,v,u,color='k',label='gv->cv(data)')
+    plt.quiver(y,x,v2,u2,color='r',label='gv->cv(model)')
     plt.grid()
     plt.gca().set_axisbelow(True)
 
     plt.axvline(x=0.0, color='g', linestyle='-', label=None)
     plt.axhline(y=0.0, color='g', linestyle='-', label=None)
 
-    plt.xlim(lim_v)
-    plt.ylim(lim_w)
-
+    plt.xlim(lim_w)
+    plt.ylim(lim_v)
 
     plt.title('Command Velocity Discrepancy Field' + (' (Rel)' if opt.rel else '') )
-    plt.xlabel('v')
-    plt.ylabel('$\omega$')
+    plt.xlabel('$\omega$')
+    plt.ylabel('v')
     plt.legend()
+    #plt.show()
+
+    delta_viz(
+        mn_v, mx_v, mn_w, mx_w, 0.05, 0.05,
+        cv, cw, gv, gw)
+
+    delta_viz(
+        mn_v, mx_v, mn_w, mx_w, 0.05, 0.05,
+        mv, mw, gv, gw)
+
     plt.show()
 
 if __name__ == '__main__':
