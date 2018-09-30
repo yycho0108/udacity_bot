@@ -18,6 +18,8 @@ class Teleop(object):
         self.w_scale_ = rospy.get_param('~w_scale', 1.0)
         self.timeout_ = rospy.get_param('~timeout', 1.0)
         self.res_ = rospy.get_param('~resolution', 255)
+        self.viz_ = rospy.get_param('~viz', True)
+        self.decay_ = rospy.get_param('~decay', 0.99)
 
         # actions
         self.amap_ = {
@@ -30,6 +32,7 @@ class Teleop(object):
                 }
 
         # cmd gui input
+        self.x_, self.y_ = 0,0
         self.cmd_v_ = 0
         self.cmd_w_ = 0
         self.cmd_active_ = False
@@ -53,6 +56,7 @@ class Teleop(object):
 
         if event == cv2.EVENT_MOUSEMOVE:
             if self.cmd_active_:
+                self.x_, self.y_ = x, y
                 self.cmd_v_ = (-y) / float(self.res_) + 0.5
                 self.cmd_w_ = np.sign(self.cmd_v_) * (-x/float(self.res_) + 0.5)
                 self.last_cmd_ = rospy.Time.now()
@@ -67,6 +71,8 @@ class Teleop(object):
         viz = np.zeros(shape=(self.res_, self.res_), dtype=np.float32)
         viz[:,self.res_/2] = 1.0
         viz[self.res_/2,:] = 1.0
+
+        acc = np.zeros_like(viz)
         cv2.namedWindow('control')
         cv2.setMouseCallback('control', self.mouse_cb)
         cv2.imshow('control', viz)
@@ -78,6 +84,8 @@ class Teleop(object):
 
                 # handle key input
                 k = cv2.waitKey(10)
+                if k == 27:
+                    break
                 if k in self.amap_:
                     self.new_key_ = False
                     sv, sw = self.amap_[k]
@@ -90,10 +98,17 @@ class Teleop(object):
                 cmd_vel.linear.x = self.cmd_v_ * 2 * self.v_scale_
                 cmd_vel.angular.z = self.cmd_w_ * 2 * self.w_scale_
 
+                if self.viz_:
+                    acc[self.y_-1:self.y_+2,self.x_-1:self.x_+2] += 0.1
+                    #cv2.circle(acc, (self.x_, self.y_), 3, 1.0, -1)
+                    acc *= self.decay_
+                    cv2.imshow('control', viz + acc)
+
                 # handle timeout
-                if (now - self.last_cmd_).to_sec() > (self.timeout_):
-                    cmd_vel.linear.x  = 0
-                    cmd_vel.angular.z = 0
+                if not self.cmd_active_:
+                    if (now - self.last_cmd_).to_sec() > (self.timeout_):
+                        cmd_vel.linear.x  = 0
+                        cmd_vel.angular.z = 0
 
                 # handle publishing
                 if repeat_flag and (now - self.last_pub_).to_sec() > (self.period_):

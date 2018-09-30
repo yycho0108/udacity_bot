@@ -25,7 +25,7 @@ class CmdCalib(object):
         # get parameters
         self.slop_ = rospy.get_param('~slop', default=0.01)
         self.win_ = rospy.get_param('~win', default=0.1) # collection window, sec
-        self.min_sample_ = rospy.get_param('~min_sample', default=5) # minimum number of samples for data entry
+        self.min_sample_ = rospy.get_param('~min_sample', default=10) # minimum number of samples for data entry
         self.min_var_    = rospy.get_param('~min_var', default=0.02)
         self.src_ = rospy.get_param('~src', default='pose') # [pose, odom, tf]
 
@@ -87,6 +87,8 @@ class CmdCalib(object):
         # filter by elapsed time and number of samples
         if (dt_proc < self.win_) or len(self.raw_) < self.min_sample_:
             return
+
+        rospy.loginfo('dt,len : {},{}'.format(dt_proc, len(self.raw_)))
 
         raw = np.asarray(self.raw_, dtype=np.float32)
         v_cv, v_cw = np.var(raw[:,:2], axis=0)
