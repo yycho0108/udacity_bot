@@ -64,7 +64,9 @@ class ScanToAngle:
         sum_xy = 0
         num = 0
         for r in msg.ranges:
-            if angle > self.min_angle and angle < self.max_angle and r < msg.range_max:
+            r_check = (msg.range_min < r < msg.range_max)
+            a_check = (self.min_angle < angle < self.max_angle)
+            if r_check and a_check:
                 x = sin(angle) * r
                 y = cos(angle) * r
                 sum_x += x
