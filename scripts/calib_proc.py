@@ -23,20 +23,25 @@ def optimize_v2(src, dst):
     v, w = src
 
     A = np.array([
-        np.ones_like(v), v, w,
+        v, w,
         v*v, v*w, w*w]).T
+    #A = np.array([v, w]).T
     B = dst.T
     c,r = np.linalg.lstsq(A,B,rcond=None)[0:2]
     print 'hmm', c
     print 'hmm-r', r
-    #clf = LinearRegression()
-    #clf.fit(A,B)
-    #print 'hmm', clf.coef_
 
-    vex = 'v\' = {} + {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,0])
-    wex = 'w\' = {} + {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,1])
+    vex = 'v\' = {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,0])
+    wex = 'w\' = {}v + {}w + {}v.v + {}v.w + {}w.w'.format(*c[:,1])
 
-    return lambda v,w : c.T.dot([np.ones_like(v),v,w,v*v,v*w,w*w])
+    #vex = 'v\' = {}v + {}w'.format(*c[:,0])
+    #wex = 'w\' = {}v + {}w'.format(*c[:,1])
+    print vex
+    print wex
+
+    return lambda v,w : c.T.dot([v,w,v*v,v*w,w*w])
+    #return lambda v,w : c.T.dot([v, w])
+
 
 def main():
     # arguments
@@ -58,7 +63,7 @@ def main():
     mfun = optimize_v2(
             np.stack([gv,gw], axis=0),
             np.stack([cv,cw], axis=0))
-    #gv, gw = mfun(gv,gw)
+    gv, gw = mfun(gv,gw)
 
 
     # find limits
