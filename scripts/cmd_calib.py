@@ -26,7 +26,7 @@ class CmdCalib(object):
         self.slop_ = rospy.get_param('~slop', default=0.01)
         self.win_ = rospy.get_param('~win', default=0.1) # collection window, sec
         self.min_sample_ = rospy.get_param('~min_sample', default=5) # minimum number of samples for data entry
-        self.min_var_    = rospy.get_param('~min_var', default=0.05)
+        self.min_var_    = rospy.get_param('~min_var', default=0.02)
         self.src_ = rospy.get_param('~src', default='pose') # [pose, odom, tf]
 
         # register ROS handles
@@ -95,9 +95,9 @@ class CmdCalib(object):
             # filter by input variance
             # considered steady-state input (i.e. not in transition)
 
-            dt_entry = (raw[-1,-1] - raw[0,-1])
+            dt_entry = float(raw[-1,-1] - raw[0,-1])
 
-            dist = np.sum(np.linalg.norm(np.diff(raw[:,2:4]),axis=-1))
+            dist = np.sum(np.linalg.norm(np.diff(raw[:,2:4], axis=0),axis=-1))
 
             # ground truth lin.vel / ang.vel
             gv    = dist / dt_entry

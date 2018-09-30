@@ -61,6 +61,12 @@ class Teleop(object):
         self.key_thread_.setDaemon(True)
         self.key_thread_.start()
 
+    def help(self):
+        print '\r[params] repeat : {} | period : {}'.format(self.period_>0, self.period_)
+        print '\rq/z : increase/decrease max speeds by 10%'
+        print '\rw/x : increase/decrease only linear speed by 10%'
+        print '\re/c : increase/decrease only angular speed by 10%'
+
     def get_key(self):
         """ non-blocking keyboard input """
         tty.setraw(sys.stdin.fileno())
@@ -85,7 +91,6 @@ class Teleop(object):
             if key is None:
                 time.sleep(0.01)
             else:
-                #print 'key', key
                 self.key_ = key
                 self.new_key_ = True
 
@@ -93,6 +98,8 @@ class Teleop(object):
         """ main loop """
         repeat_flag = (self.period_ > 0)
         cmd_vel     = Twist()
+
+        self.help()
 
         try:
             while not rospy.is_shutdown():
@@ -123,7 +130,7 @@ class Teleop(object):
                             self.v_scale_, self.w_scale_))
                     else:
                         if k is not None:
-                            print 'k?', k
+                            rospy.loginfo('Unregistered key : {}'.format(k))
 
                 # handle timeout
                 if (now - self.last_cmd_).to_sec() > (self.timeout_):
