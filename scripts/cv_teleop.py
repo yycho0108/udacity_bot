@@ -127,7 +127,7 @@ class Teleop(object):
 
 
 def main():
-    rospy.init_node('comprobo_teleop_key')
+    rospy.init_node('cv_mouse_teleop')
     node = Teleop()
     node.run()
 

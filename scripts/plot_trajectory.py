@@ -23,19 +23,18 @@ def xq2p(x,q):
 
 class TrajectoryPublisher(object):
     """
-    Plots trajectory of `target` frame w.r.t. `source` frame and publishes over `path` topic (nav_msgs/Path).
-    WARNING: the source and target definitions are different from TransformListener().lookupTransform(...) arguments,
-    because at least I think it's a confusing name.
+    Plots trajectory of `source` frame w.r.t. `target` frame and publishes over `path` topic (nav_msgs/Path).
+    rosrun udacity_bot plot_trajectory.py _source:=[robot_footprint|base_link|...] _target:=[map|odom|...]
     """
     
     def __init__(self):
         rospy.init_node('plot_trajectory')
-        self._src_frame = rospy.get_param('~source', 'map')
-        self._dst_frame = rospy.get_param('~target', 'robot_footprint')
+        self._source = rospy.get_param('~source', 'robot_footprint')
+        self._target = rospy.get_param('~target', 'map')
 
         self._path = Path()
-        self._path.header = Header(frame_id=self._src_frame, stamp=rospy.Time.now())
-        self._path.header.frame_id = self._src_frame
+        self._path.header = Header(frame_id=self._target, stamp=rospy.Time.now())
+        self._path.header.frame_id = self._target
         self._path.header.stamp = rospy.Time.now()
 
         self._tfl = tf.TransformListener()
@@ -51,9 +50,9 @@ class TrajectoryPublisher(object):
         rate = rospy.Rate(50)
         while not rospy.is_shutdown():
             try:
-                x, q = self._tfl.lookupTransform(self._src_frame, self._dst_frame, rospy.Time(0))
+                x, q = self._tfl.lookupTransform(self._target, self._source, rospy.Time(0))
                 self._path.poses.append(PoseStamped(
-                    header=Header(frame_id=self._src_frame, stamp=rospy.Time.now()),
+                    header=Header(frame_id=self._target, stamp=rospy.Time.now()),
                     pose=xq2p(x,q)))
                 self._pub.publish(self._path)
             except Exception as e:
