@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+
+    <!-- relay gazebo_ros arguments -->
 	<arg name="world" default="jackal_race"/> 
 	<arg name="paused" default="false"/>
 	<arg name="use_sim_time" default="true"/>
 	<arg name="gui" default="true"/>
 	<arg name="headless" default="false"/>
 	<arg name="debug" default="false"/>
-	<arg name="robot" default="true"/>
+
+	<arg name="spawn" default="true" doc="also spawn the robot in the simulation."/>
+    <arg name="robot" default="udacity_bot" doc="robot name (see files under udacity_bot/urdf for options)"/>
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 		<!--<arg name="world_name" value="$(find udacity_bot)/worlds/udacity.world"/>-->
@@ -18,7 +22,7 @@
 		<arg name="debug" value="$(arg debug)"/>
 	</include>
 
-	<group if="$(arg robot)">
+	<group if="$(arg spawn)">
 		<include file="$(find udacity_bot)/launch/robot_description.launch"/>
 		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
 			output="screen" args="-urdf -param robot_description -model udacity_bot"/>
