@@ -1,22 +1,39 @@
 <launch>
+	<arg name="type" default="dwa"/>
+
+	<arg name="is_base" default="$(eval arg('type') == 'base')"/>
+	<arg name="is_dwa" default="$(eval arg('type') == 'dwa')"/>
+	<arg name="is_teb" default="$(eval arg('type') == 'teb')"/>
+
+	<arg name="local_planner_type" value="base_local_planner/TrajectoryPlannerROS" if="$(arg is_base)"/>
+	<arg name="local_planner_cfg" value="base_local_planner_params.yaml" if="$(arg is_base)"/>
+
+	<arg name="local_planner_type" value="dwa_local_planner/DWAPlannerROS" if="$(arg is_dwa)"/>
+	<arg name="local_planner_cfg" value="dwa_local_planner_params.yaml" if="$(arg is_dwa)"/>
+
+	<arg name="local_planner_type" value="teb_local_planner/TebLocalPlannerROS" if="$(arg is_teb)"/>
+	<arg name="local_planner_cfg" value="teb_local_planner_params.yaml" if="$(arg is_teb)"/>
 
 	<!-- Move base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
 		<rosparam file="$(find udacity_bot)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find udacity_bot)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
 		<rosparam file="$(find udacity_bot)/config/local_costmap_params.yaml" command="load" />
 		<rosparam file="$(find udacity_bot)/config/global_costmap_params.yaml" command="load" />
-		<!--<rosparam file="$(find udacity_bot)/config/base_local_planner_params.yaml" command="load" />-->
-		<rosparam file="$(find udacity_bot)/config/dwa_local_planner_params.yaml" command="load" />
+
+		<rosparam file="$(find udacity_bot)/config/$(arg local_planner_cfg)" command="load" />
+		<param name="base_local_planner" value="$(arg local_planner_type)"/>
+
+		<param name="base_global_planner" type="string" value="navfn/NavfnROS" />
 		<rosparam file="$(find udacity_bot)/config/move_base.yaml" command="load" />
+
+		<!-- DO NOT use DWA planner : see https://github.com/ros-planning/navigation/issues/503
+		-->
 
 		<remap from="cmd_vel" to="cmd_vel"/>
 		<remap from="odom" to="odom"/>
 		<remap from="scan" to="/scan"/>
-
-		<param name="base_global_planner" type="string" value="navfn/NavfnROS" />
-		<!--<param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/>-->
-		<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
 		<param name="planner_frequency" value="0.2"/>
 
 	</node>

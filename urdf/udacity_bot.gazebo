@@ -27,8 +27,8 @@
             -->
 
             <!-- apply odom correction, see cmd_calib.py -->
-            <wheelSeparation>${0.3}</wheelSeparation>
-            <wheelDiameter>${0.2}</wheelDiameter>
+            <wheelSeparation>0.3</wheelSeparation>
+            <wheelDiameter>0.2</wheelDiameter>
 
             <torque>100</torque>
             <commandTopic>cmd_vel</commandTopic>
@@ -125,7 +125,6 @@
         <frameName>map</frameName>
     </plugin>
 
-
     <gazebo reference="left_wheel_link">
         <material>Gazebo/Grey</material>
         <mu1 value="${wm1}"/>
@@ -148,7 +147,7 @@
     </gazebo>
     <gazebo reference="chassis">
         <material>Gazebo/Yellow</material>
-        <mu1 value="0"/>
+        <mu2 value="0.1"/>
         <mu2 value="0"/>
         <kp value="1e12" />
         <kd value="1e0" />
