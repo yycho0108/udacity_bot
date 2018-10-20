@@ -181,7 +181,7 @@ Visualization Manager:
       Max Color: 255; 255; 255
       Max Intensity: 999999
       Min Color: 0; 0; 0
-      Min Intensity: 0
+      Min Intensity: -3.91748326e-26
       Name: Scan
       Position Transformer: XYZ
       Queue Size: 10
@@ -267,7 +267,7 @@ Visualization Manager:
       Buffer Length: 1
       Class: rviz/Path
       Color: 25; 255; 0
-      Enabled: false
+      Enabled: true
       Head Diameter: 0.300000012
       Head Length: 0.200000003
       Length: 0.300000012
@@ -285,7 +285,7 @@ Visualization Manager:
       Shaft Length: 0.100000001
       Topic: /move_base/NavfnROS/plan
       Unreliable: false
-      Value: false
+      Value: true
     - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
@@ -442,11 +442,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 77.7816467
+      Scale: 69.782341
       Target Frame: base_link
       Value: TopDownOrtho (rviz)
-      X: 1.59887099
-      Y: 2.38854361
+      X: 2.84531307
+      Y: 3.07144427
     Saved: ~
 Window Geometry:
   Camera:

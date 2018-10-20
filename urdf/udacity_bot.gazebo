@@ -116,14 +116,16 @@
         </sensor>
     </gazebo>
 
-    <plugin name="ground_truth_p3d" filename="libgazebo_ros_p3d.so">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>100.0</updateRate>
-        <bodyName>robot_footprint</bodyName>
-        <topicName>ground_truth_pose</topicName>
-        <gaussianNoise>0.0</gaussianNoise>
-        <frameName>map</frameName>
-    </plugin>
+	<gazebo>
+		<plugin name="ground_truth_p3d" filename="libgazebo_ros_p3d.so">
+			<alwaysOn>true</alwaysOn>
+			<updateRate>100.0</updateRate>
+			<bodyName>robot_footprint</bodyName>
+			<topicName>ground_truth_pose</topicName>
+			<gaussianNoise>0.0</gaussianNoise>
+			<frameName>map</frameName>
+		</plugin>
+	</gazebo>
 
     <gazebo reference="left_wheel_link">
         <material>Gazebo/Grey</material>

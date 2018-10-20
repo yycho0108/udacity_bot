@@ -10,6 +10,6 @@ Note `scripts/calibrate.py` and `scripts/scan_to_angle.py` are from the `turtleb
 roscore
 roslaunch udacity_bot udacity_world.launch robot:=udacity_bot
 roslaunch udacity_bot amcl.launch
-roslaunch udacity_bot move_base.launch
+roslaunch udacity_bot move_base.launch type:=teb
 rosrun udacity_bot navigation_goal
 ```

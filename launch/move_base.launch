@@ -5,6 +5,8 @@
 	<arg name="is_dwa" default="$(eval arg('type') == 'dwa')"/>
 	<arg name="is_teb" default="$(eval arg('type') == 'teb')"/>
 
+	<!-- TODO : ugly syntax; better way to mux between local planner types? -->
+
 	<arg name="local_planner_type" value="base_local_planner/TrajectoryPlannerROS" if="$(arg is_base)"/>
 	<arg name="local_planner_cfg" value="base_local_planner_params.yaml" if="$(arg is_base)"/>
 
