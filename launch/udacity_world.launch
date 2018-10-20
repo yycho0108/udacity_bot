@@ -11,8 +11,9 @@
 
 	<arg name="spawn" default="true" doc="also spawn the robot in the simulation."/>
     <arg name="robot" default="udacity_bot" doc="robot name (see files under udacity_bot/urdf for options)"/>
+    <arg name="filter" default="true" doc="whether to apply post-processing laser-scan filter"/>
 
-	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+	<include file="$(find udacity_bot)/launch/empty_world.launch">
 		<!--<arg name="world_name" value="$(find udacity_bot)/worlds/udacity.world"/>-->
 		<arg name="world_name" value="$(find udacity_bot)/worlds/$(arg world).world"/>
 		<arg name="paused" value="$(arg paused)"/>
@@ -20,6 +21,7 @@
 		<arg name="gui" value="$(arg gui)"/>
 		<arg name="headless" value="$(arg headless)"/>
 		<arg name="debug" value="$(arg debug)"/>
+        <arg name="filter" value="$(arg filter)"/>
 	</include>
 
 	<group if="$(arg spawn)">
@@ -27,5 +29,7 @@
 		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
 			output="screen" args="-urdf -param robot_description -model udacity_bot"/>
 	</group>
+
+    <include if="$(arg filter)" file="$(find udacity_bot)/launch/laser_filter.launch"/>
 
 </launch>

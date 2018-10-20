@@ -14,23 +14,11 @@
 			<leftJoint>left_wheel_joint</leftJoint>
 			<rightJoint>right_wheel_joint</rightJoint>
 
-			<!-- basic form -->
-			<!--
-			<wheelSeparation>0.3</wheelSeparation>
-			<wheelDiameter>0.2</wheelDiameter> 
-			-->
-
-			<!-- apply odom correction, see calibration.launch -->
-			<!--
-			<wheelSeparation>0.3</wheelSeparation>
-			<wheelDiameter>${0.2 * 0.859}</wheelDiameter>
-			-->
-
 			<!-- apply odom correction, see cmd_calib.py -->
-			<wheelSeparation>${0.3}</wheelSeparation>
-			<wheelDiameter>${0.2}</wheelDiameter>
+			<wheelSeparation>0.4</wheelSeparation>
+			<wheelDiameter>0.2</wheelDiameter>
 
-			<torque>100</torque>
+			<torque>10</torque>
 			<commandTopic>cmd_vel</commandTopic>
 			<odometryTopic>odom</odometryTopic>
 			<odometryFrame>odom</odometryFrame>
@@ -41,7 +29,7 @@
 			<publishWheelJointState>false</publishWheelJointState>
 			<wheelAcceleration>1.8</wheelAcceleration>
 			<wheelTorque>100</wheelTorque>
-			<odometrySource>encoder</odometrySource>
+			<odometrySource>world</odometrySource>
 		</plugin>
 	</gazebo>
 
@@ -118,33 +106,12 @@
 
 	<gazebo reference="left_wheel_link">
 		<material>Gazebo/Grey</material>
-		<mu1 value="${wm1}"/>
-		<mu2 value="${wm2}"/>
-		<kp value="${wkp}" />
-		<kd value="${wkd}" />
-		<!--<fdir1 value="1 0 0"/>-->
-		<minDepth value="${wmd}"/>
-		<maxVel value="0"/>
 	</gazebo>
 	<gazebo reference="right_wheel_link">
 		<material>Gazebo/Grey</material>
-		<mu1 value="${wm1}"/>
-		<mu2 value="${wm2}"/>
-		<kp value="${wkp}" />
-		<kd value="${wkd}" />
-		<!--<fdir1 value="1 0 0"/>-->
-		<minDepth value="${wmd}"/>
-		<maxVel value="0"/>
 	</gazebo>
 	<gazebo reference="chassis">
 		<material>Gazebo/Yellow</material>
-		<mu1 value="0"/>
-		<mu2 value="0"/>
-		<kp value="1e12" />
-		<kd value="1e0" />
-		<!--<fdir1 value="1 0 0"/>-->
-		<minDepth value="${wmd}"/>
-		<maxContacts>1</maxContacts>
 	</gazebo>
 
 </robot>
