@@ -6,6 +6,8 @@ Note `scripts/calibrate.py` and `scripts/scan_to_angle.py` are from the `turtleb
 
 ## Running
 
+![gazebo](figs/gazebo.jpg)
+
 ```bash
 roscore
 roslaunch udacity_bot udacity_world.launch robot:=udacity_bot
@@ -22,6 +24,26 @@ Note that the current default goal position honors the Udacity-supplied default,
 
 ## Visualization
 
+![rviz](figs/rviz.png)
+
 ```bash
 roslaunch udacity_bot rviz.launch cfg:=amcl
 ```
+
+## Evaluation
+
+![eval](figs/loc_err.png)
+
+In order to evaluate the localization performance against ground truth data, run:
+
+```bash
+rosrun udacity_bot loc_eval.py
+```
+
+After the data collection process, plot the collected data as follows:
+
+```bash
+rosrun udacity_bot loc_eval.py _plot:=true
+```
+
+Note that the collected data is saved under `/tmp/err.npy`.

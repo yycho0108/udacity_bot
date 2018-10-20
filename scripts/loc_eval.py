@@ -3,6 +3,7 @@
 import numpy as np
 import rospy
 import message_filters
+import sys
 
 from tf_conversions import posemath as pm
 from tf import transformations as tx
@@ -26,6 +27,11 @@ class LocEval(object):
     """ evaluate localization performance """
     def __init__(self):
         # unroll params
+        self.plot_ = rospy.get_param('~plot', default=False)
+        if(self.plot_):
+            self.plot()
+            sys.exit(0)
+
         self.slop_ = rospy.get_param('~slop', default=0.01)
         self.rate_ = rospy.get_param('~rate', default=50.0)
 
@@ -76,30 +82,29 @@ class LocEval(object):
 
         rospy.loginfo_throttle(1.0, 'Data Stats: {}'.format(self.stat()))
 
+    def plot(self):
+        data = np.load('/tmp/err.npy')
+        stamp = data[:,0] - data[0,0]
+        d_pos = np.linalg.norm(data[:,1:3], axis=-1)
+        d_rot = np.rad2deg(np.abs(data[:,-1]))
+        fig, ax = plt.subplots(2,1, sharex=True)
+        ax[0].plot(stamp, d_pos)
+        ax[0].set_ylabel('Pos Error(m)')
+        ax[0].grid()
+        ax[0].set_title('Localization Error Characterization')
+        ax[1].plot(stamp, d_rot)
+        ax[1].set_ylabel('Rot Error(deg)')
+        ax[1].grid()
+        ax[1].set_xlabel('Time (sec)')
+        plt.show()
+
     def save(self):
         np.save('/tmp/err.npy', self.err_)
 
-def plot_error():
-    data = np.load('/tmp/err.npy')
-    stamp = data[:,0] - data[0,0]
-    d_pos = np.linalg.norm(data[:,1:3], axis=-1)
-    d_rot = np.rad2deg(np.abs(data[:,-1]))
-    fig, ax = plt.subplots(2,1, sharex=True)
-    ax[0].plot(stamp, d_pos)
-    ax[0].set_ylabel('Pos Error(m)')
-    ax[0].grid()
-    ax[0].set_title('Localization Error Characterization')
-    ax[1].plot(stamp, d_rot)
-    ax[1].set_ylabel('Rot Error(deg)')
-    ax[1].grid()
-    ax[1].set_xlabel('Time (sec)')
-    plt.show()
-
 def main():
-    #rospy.init_node('loc_eval')
-    #node = LocEval()
-    #node.run()
-    plot_error()
+    rospy.init_node('loc_eval')
+    node = LocEval()
+    node.run()
 
 if __name__ == "__main__":
     main()
