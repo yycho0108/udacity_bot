@@ -1,3 +1,4 @@
 <launch>
-	<node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find udacity_bot)/rviz/default.rviz"/>
+	<arg name="cfg" default="default"/>
+	<node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find udacity_bot)/rviz/$(cfg).rviz"/>
 </launch>

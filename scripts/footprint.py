@@ -20,6 +20,7 @@ def box_points(o, w, h, r=0.0):
     return np.reshape(o, [-1,2]) + np.dot(pts, R(r).T)
 
 def plot_closed(pts, *args, **kwargs):
+    ax = plt.gca()
     pts_wrap = np.concatenate([pts, pts[:1]], axis=0)
     plt.plot(pts_wrap[:,0], pts_wrap[:,1], *args, **kwargs)
 
@@ -41,13 +42,20 @@ def main():
     plot_closed(chassis, 'b--', label='chassis')
     plot_closed(fpts, 'k-', label='footprint')
 
+    ax = plt.gca()
+
+    ax.fill(fpts[:,0], fpts[:,1], 'k', alpha=0.3)
+    ax.fill(l_wheel[:,0], l_wheel[:,1], 'r', alpha=0.5)
+    ax.fill(r_wheel[:,0], r_wheel[:,1], 'g', alpha=0.5)
+    ax.fill(chassis[:,0], chassis[:,1], 'b', alpha=0.5)
+
     #plt.plot(l_wheel[:,0], l_wheel[:,1], 'k--', label='l_wheel')
     #plt.plot(r_wheel[:,0], r_wheel[:,1], 'k--', label='r_wheel')
     #plt.plot(chassis[:,0], chassis[:,1], 'k--', label='chassis')
     #plt.plot(fpts[:,0], fpts[:,1], label='footprint')
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.title('footprint hull visualization')
+    plt.title('Footprint Hull Visualization')
     plt.grid()
     plt.legend()
     plt.show()

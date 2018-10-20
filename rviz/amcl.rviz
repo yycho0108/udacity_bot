@@ -7,6 +7,8 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
+        - /GroundTruth1
+        - /GroundTruth1/Shape1
       Splitter Ratio: 0.53125
     Tree Height: 506
   - Class: rviz/Selection
@@ -154,6 +156,7 @@ Visualization Manager:
         GlobalCost: true
         Goal: true
         Grid: true
+        GroundTruth: true
         LocalCost: true
         Map: true
         NavFnGlobalPlan: true
@@ -181,7 +184,7 @@ Visualization Manager:
       Max Color: 255; 255; 255
       Max Intensity: 999999
       Min Color: 0; 0; 0
-      Min Intensity: -3.91748326e-26
+      Min Intensity: 0
       Name: Scan
       Position Transformer: XYZ
       Queue Size: 10
@@ -408,6 +411,40 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
+    - Angle Tolerance: 0.100000001
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.300000012
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 1
+      Name: GroundTruth
+      Position Tolerance: 0.100000001
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.100000001
+        Color: 26; 131; 200
+        Head Length: 0.300000012
+        Head Radius: 0.100000001
+        Shaft Length: 1
+        Shaft Radius: 0.0500000007
+        Value: Arrow
+      Topic: /ground_truth_pose
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -442,11 +479,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 69.782341
+      Scale: 85.808342
       Target Frame: base_link
       Value: TopDownOrtho (rviz)
-      X: 2.84531307
-      Y: 3.07144427
+      X: 3.24289966
+      Y: 0.374901861
     Saved: ~
 Window Geometry:
   Camera:
