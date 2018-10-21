@@ -91,7 +91,7 @@ class LocEval(object):
         ax[0].plot(stamp, d_pos)
         ax[0].set_ylabel('Pos Error(m)')
         ax[0].grid()
-        ax[0].set_title('Localization Error Characterization')
+        ax[0].set_title('Udacity Bot Localization Error Characterization')
         ax[1].plot(stamp, d_rot)
         ax[1].set_ylabel('Rot Error(deg)')
         ax[1].grid()
