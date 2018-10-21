@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-    <xacro:property name="wm1" value="0.8"/>
-    <xacro:property name="wm2" value="0.8"/>
-    <xacro:property name="wkp" value="1e12"/>
-    <xacro:property name="wkd" value="1e0"/>
+    <xacro:property name="wm1" value="10.0"/>
+    <xacro:property name="wm2" value="5.0"/>
+    <xacro:property name="wkp" value="1e9"/>
+    <xacro:property name="wkd" value="2e5"/>
     <xacro:property name="wmd" value="1e-2"/>
 
     <gazebo>
@@ -28,7 +28,7 @@
 
             <!-- apply odom correction, see cmd_calib.py -->
             <wheelSeparation>0.3</wheelSeparation>
-            <wheelDiameter>0.2</wheelDiameter>
+            <wheelDiameter>0.1</wheelDiameter>
 
             <torque>100</torque>
             <commandTopic>cmd_vel</commandTopic>
@@ -82,7 +82,7 @@
     <!-- hokuyo -->
     <gazebo reference="laser">
         <sensor type="ray" name="head_hokuyo_sensor">
-            <pose>0 0 0 0 0 0</pose>
+            <pose>0 0 0.05 0 0 0</pose>
             <visualize>false</visualize>
             <update_rate>40</update_rate>
             <ray>
@@ -133,9 +133,10 @@
         <mu2 value="${wm2}"/>
         <kp value="${wkp}" />
         <kd value="${wkd}" />
-        <!--<fdir1 value="1 0 0"/>-->
-        <minDepth value="${wmd}"/>
+        <fdir1 value="1 0 0"/>
+		<!--<minDepth value="${wmd}"/>-->
         <maxVel value="0"/>
+		<!--<maxContacts>1</maxContacts>-->
     </gazebo>
     <gazebo reference="right_wheel_link">
         <material>Gazebo/Grey</material>
@@ -143,19 +144,20 @@
         <mu2 value="${wm2}"/>
         <kp value="${wkp}" />
         <kd value="${wkd}" />
-        <!--<fdir1 value="1 0 0"/>-->
-        <minDepth value="${wmd}"/>
+        <fdir1 value="1 0 0"/>
+		<!--<minDepth value="${wmd}"/>-->
         <maxVel value="0"/>
+		<!--<maxContacts>1</maxContacts>-->
     </gazebo>
     <gazebo reference="chassis">
         <material>Gazebo/Yellow</material>
-        <mu2 value="0.1"/>
-        <mu2 value="0"/>
-        <kp value="1e12" />
-        <kd value="1e0" />
+        <mu1 value="0.0"/>
+        <mu2 value="0.0"/>
+        <kp value="1e9" />
+        <kd value="2e5" />
         <!--<fdir1 value="1 0 0"/>-->
-        <minDepth value="${wmd}"/>
-        <maxContacts>1</maxContacts>
+		<!--<minDepth value="${wmd/2}"/>-->
+		<!--<maxContacts>0</maxContacts>-->
     </gazebo>
 
 </robot>
