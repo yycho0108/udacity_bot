@@ -1,5 +1,0 @@
-<launch>
-	<!--<include file="$(find udacity_bot)/launch/robot_description.launch"/>-->
-	<include file="$(find udacity_bot)/launch/amcl.launch"/>
-	<include file="$(find udacity_bot)/launch/move_base.launch"/>
-</launch>

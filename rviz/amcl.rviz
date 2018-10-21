@@ -216,7 +216,7 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Alpha: 9.99999975e-05
-      Arrow Length: 1
+      Arrow Length: 0.300000012
       Axes Length: 0.300000012
       Axes Radius: 0.00999999978
       Class: rviz/PoseArray
@@ -477,7 +477,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 25.1610298
+      Distance: 30.4114246
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1

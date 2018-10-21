@@ -30,6 +30,8 @@ def main():
     chassis = box_points([0.0,0.0], 0.4, 0.2)
     
     pts = np.concatenate([l_wheel, r_wheel, chassis])
+    print np.max(np.linalg.norm(pts, axis=-1))
+
     idx = ConvexHull(pts).vertices
     fpts = pts[idx]
 
