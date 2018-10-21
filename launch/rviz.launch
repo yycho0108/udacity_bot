@@ -1,4 +1,4 @@
 <launch>
 	<arg name="cfg" default="default"/>
-	<node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find udacity_bot)/rviz/$(cfg).rviz"/>
+	<node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find udacity_bot)/rviz/$(arg cfg).rviz"/>
 </launch>

@@ -25,7 +25,9 @@
 	</include>
 
 	<group if="$(arg spawn)">
-		<include file="$(find udacity_bot)/launch/robot_description.launch"/>
+		<include file="$(find udacity_bot)/launch/robot_description.launch">
+			<arg name="robot" value="$(arg robot)"/>
+		</include>
 		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
 			output="screen" args="-urdf -param robot_description -model udacity_bot"/>
 	</group>
