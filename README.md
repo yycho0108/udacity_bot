@@ -1,4 +1,4 @@
-# Udacity\_Bot
+# Udacity Bot
 
 Primary ROS Package for Udacity Robotics Nanodegree Term 2 Project 2 : Robot Localization.
 
@@ -33,6 +33,8 @@ Additionally, the goal position can be specified with `_gx`, `_gy` and `gh` para
 Note that the current default goal position honors the Udacity-supplied default, (0.995, -2.99, 0.0).
 
 ## Visualization
+
+When you open the RVIZ screen, the main display should look roughly as follows (apart from windows decorations and the display panel)
 
 ![rviz](figs/rviz.png)
 
