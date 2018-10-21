@@ -29,7 +29,7 @@
 			<arg name="robot" value="$(arg robot)"/>
 		</include>
 		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false"
-			output="screen" args="-urdf -param robot_description -model udacity_bot"/>
+			output="screen" args="-urdf -param robot_description -model $(arg robot)"/>
 	</group>
 
     <include if="$(arg filter)" file="$(find udacity_bot)/launch/laser_filter.launch"/>
