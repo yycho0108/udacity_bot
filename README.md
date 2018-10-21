@@ -4,6 +4,8 @@ Primary ROS Package for Udacity Robotics Nanodegree Term 2 Project 2 : Robot Loc
 
 Note `scripts/calibrate.py` and `scripts/scan_to_angle.py` are from the `turtlebot_calibration` package.
 
+Refer to the [report](report.pdf) for the formal report, and note that the supporting figures are in [figs/report](figs/report).
+
 ## Building
 
 ```bash
@@ -20,7 +22,7 @@ catkin build udacity_bot
 roscore
 roslaunch udacity_bot udacity_world.launch robot:=udacity_bot
 roslaunch udacity_bot amcl.launch
-roslaunch udacity_bot move_base.launch type:=teb
+roslaunch udacity_bot move_base.launch type:=teb robot:=udacity_bot
 rosrun udacity_bot navigation_goal #_reset:=true
 ```
 
