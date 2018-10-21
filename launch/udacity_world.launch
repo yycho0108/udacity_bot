@@ -12,6 +12,7 @@
 	<arg name="spawn" default="true" doc="also spawn the robot in the simulation."/>
     <arg name="robot" default="udacity_bot" doc="robot name (see files under udacity_bot/urdf for options)"/>
     <arg name="filter" default="true" doc="whether to apply post-processing laser-scan filter"/>
+	<arg name="ucompat" default="true" doc="compliance with udacity project submission requirements"/>
 
 	<include file="$(find udacity_bot)/launch/empty_world.launch">
 		<!--<arg name="world_name" value="$(find udacity_bot)/worlds/udacity.world"/>-->
@@ -33,5 +34,11 @@
 	</group>
 
     <include if="$(arg filter)" file="$(find udacity_bot)/launch/laser_filter.launch"/>
+
+	<group if="$(arg ucompat)">
+		<include file="$(find udacity_bot)/launch/rviz.launch">
+			<arg name="cfg" value="amcl"/>
+		</include>
+	</group>
 
 </launch>

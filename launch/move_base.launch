@@ -1,6 +1,6 @@
 <launch>
 	<arg name="robot" default="udacity_bot"/>
-	<arg name="type" default="dwa"/>
+	<arg name="type" default="teb"/>
 
 	<arg name="is_base" default="$(eval arg('type') == 'base')"/>
 	<arg name="is_dwa" default="$(eval arg('type') == 'dwa')"/>

@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <launch>
-
 	<!-- Map server -->
 	<arg name="map_file" default="$(find udacity_bot)/maps/jackal_race.yaml"/>
+	<arg name="ucompat" default="true" doc="compliance with udacity project submission requirements"/>
+
 	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
 	<!-- Localization-->
@@ -27,5 +28,7 @@
 		<param name="recovery_alpha_slow" value="0.001"/>
 		<param name="recovery_alpha_fast" value="0.1"/>
 	</node>
+
+	<include if="$(arg ucompat)" file="$(find udacity_bot)/launch/move_base.launch"/>
 
 </launch>
