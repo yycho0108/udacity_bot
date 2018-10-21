@@ -70,10 +70,10 @@
     </link>
 
     <xacro:wheel wheel_prefix="left" wheel_mass="5" wheel_radius="0.1" wheel_thickness="0.05" parent="chassis">
-        <origin xyz="0 0.15 0" rpy="0 0 0"/>
+		<origin xyz="0 0.15 0" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
     <xacro:wheel wheel_prefix="right" wheel_mass="5" wheel_radius="0.1" wheel_thickness="0.05" parent="chassis">
-        <origin xyz="0 -0.15 0" rpy="0 0 0"/>
+		<origin xyz="0 -0.15 0" rpy="${-pi/2} 0 0"/>
     </xacro:wheel>
 
     <link name="camera">
