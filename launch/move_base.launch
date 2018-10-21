@@ -1,4 +1,5 @@
 <launch>
+	<arg name="robot" default="udacity_bot"/>
 	<arg name="type" default="dwa"/>
 
 	<arg name="is_base" default="$(eval arg('type') == 'base')"/>
@@ -19,12 +20,12 @@
 	<!-- Move base -->
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
 
-		<rosparam file="$(find udacity_bot)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
-		<rosparam file="$(find udacity_bot)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
-		<rosparam file="$(find udacity_bot)/config/local_costmap_params.yaml" command="load" />
-		<rosparam file="$(find udacity_bot)/config/global_costmap_params.yaml" command="load" />
+		<rosparam file="$(find udacity_bot)/config/$(arg robot)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find udacity_bot)/config/$(arg robot)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+		<rosparam file="$(find udacity_bot)/config/$(arg robot)/local_costmap_params.yaml" command="load" />
+		<rosparam file="$(find udacity_bot)/config/$(arg robot)/global_costmap_params.yaml" command="load" />
 
-		<rosparam file="$(find udacity_bot)/config/$(arg local_planner_cfg)" command="load" />
+		<rosparam file="$(find udacity_bot)/config/$(arg robot)/$(arg local_planner_cfg)" command="load" />
 		<param name="base_local_planner" value="$(arg local_planner_type)"/>
 
 		<param name="base_global_planner" type="string" value="navfn/NavfnROS" />
